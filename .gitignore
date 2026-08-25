@@ -1,0 +1,14 @@
+# Build outputs and distribution packages
+dist/
+*.zip
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo

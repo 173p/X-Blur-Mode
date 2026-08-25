@@ -1,0 +1,239 @@
+/* Boot pre-blur */
+html.xs-boot [data-testid="primaryColumn"],
+html.xs-boot [data-testid="sidebarColumn"],
+html.xs-boot [data-testid="dm-container"],
+html.xs-boot [data-testid="dm-inbox-panel"],
+html.xs-boot [data-testid="dm-conversation-panel"] {
+  filter: blur(16px) saturate(0.6);
+}
+
+/* Handles */
+html.xs-handles [data-xs="handle"] {
+  color: transparent !important;
+  text-shadow: none !important;
+  background-color: rgba(128, 128, 140, 0.38) !important;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(128, 128, 140, 0.22);
+  filter: blur(1.4px);
+  cursor: default;
+}
+
+html.xs-handles.xs-reveal [data-xs="handle"]:hover,
+html.xs-handles.xs-reveal [data-xs="handle"]:focus-visible {
+  color: inherit !important;
+  background-color: transparent !important;
+  box-shadow: none;
+  filter: none;
+}
+
+/* Display names */
+html.xs-names [data-xs-name],
+html.xs-names [data-xs-convo-name],
+html.xs-names [data-xs-cell] > div > div:first-child,
+html.xs-names [data-xs-convo] [data-testid="User-Name"],
+html.xs-names [data-testid^="dm-conversation-item"] [data-xs-convo-name],
+html.xs-names [class*="text-headline2"],
+html.xs-names [class*="text-subtext2"],
+html.xs-names [data-testid*="reply" i] span,
+html.xs-names [data-testid*="reply" i] div,
+html.xs-names [data-testid="dm-conversation-panel"] [class*="text-headline2"],
+html.xs-names [data-testid="dm-conversation-panel"] [class*="text-subtext2"],
+html.xs-names [data-testid="dm-container"] [class*="text-headline2"],
+html.xs-names [data-testid="dm-container"] [class*="text-subtext2"],
+html.xs-names [data-testid="dm-conversation-panel"] header [dir="ltr"],
+html.xs-names [data-testid="dm-conversation-panel"] header [dir="auto"],
+html.xs-names [data-testid="dm-conversation-panel"] header h2,
+html.xs-names [data-testid="dm-conversation-panel"] [data-testid*="header" i] h2,
+html.xs-names [data-testid="dm-conversation-panel"] [data-testid*="header" i] a span,
+html.xs-names [data-testid="dm-conversation-panel"] > div:first-child a[role="link"],
+html.xs-names [data-testid="dm-conversation-panel"] > div:first-child h2 {
+  filter: blur(5px);
+}
+
+html.xs-names.xs-reveal [data-xs-name]:hover,
+html.xs-names.xs-reveal [data-xs-convo-name]:hover,
+html.xs-names.xs-reveal [data-xs-convo]:hover [data-testid="User-Name"],
+html.xs-names.xs-reveal [data-xs-convo]:hover [data-xs-convo-name],
+html.xs-names.xs-reveal [class*="text-headline2"]:hover,
+html.xs-names.xs-reveal [class*="text-subtext2"]:hover,
+html.xs-names.xs-reveal [data-testid*="reply" i] span:hover,
+html.xs-names.xs-reveal [data-testid*="reply" i] div:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [class*="text-headline2"]:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [class*="text-subtext2"]:hover,
+html.xs-names.xs-reveal [data-testid="dm-container"] [class*="text-headline2"]:hover,
+html.xs-names.xs-reveal [data-testid="dm-container"] [class*="text-subtext2"]:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] header [dir="ltr"]:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] header [dir="auto"]:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] header h2:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [data-testid*="header" i] h2:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [data-testid*="header" i] a span:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] > div:first-child a[role="link"]:hover,
+html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] > div:first-child h2:hover {
+  filter: none;
+}
+
+/* Avatars */
+html.xs-avatars [data-testid^="UserAvatar-Container"],
+html.xs-avatars [data-testid*="UserAvatar-Container"],
+html.xs-avatars [data-testid="Tweet-User-Avatar"],
+html.xs-avatars [data-testid="DashButton_ProfileIcon_Link"] img,
+html.xs-avatars [data-testid*="Avatar" i],
+html.xs-avatars [data-testid*="avatar" i],
+html.xs-avatars [data-testid^="dm-conversation-item"] img,
+html.xs-avatars [data-testid="dm-conversation-panel"] img[src*="profile_images"],
+html.xs-avatars img[src*="profile_images"],
+html.xs-avatars img[src*="default_profile"] {
+  filter: blur(7px) saturate(0.5);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+html.xs-avatars.xs-reveal [data-testid^="UserAvatar-Container"]:hover,
+html.xs-avatars.xs-reveal [data-testid*="UserAvatar-Container"]:hover,
+html.xs-avatars.xs-reveal [data-testid="Tweet-User-Avatar"]:hover,
+html.xs-avatars.xs-reveal [data-testid*="Avatar" i]:hover,
+html.xs-avatars.xs-reveal [data-testid*="avatar" i]:hover,
+html.xs-avatars.xs-reveal [data-testid^="dm-conversation-item"] img:hover,
+html.xs-avatars.xs-reveal img[src*="profile_images"]:hover,
+html.xs-avatars.xs-reveal img[src*="default_profile"]:hover {
+  filter: none;
+}
+
+/* Media */
+html.xs-media [data-testid="tweetPhoto"],
+html.xs-media [data-testid="videoPlayer"],
+html.xs-media [data-testid="videoComponent"],
+html.xs-media [data-testid="card.wrapper"],
+html.xs-media [data-testid="card.layoutLarge.media"],
+html.xs-media [data-testid="card.layoutSmall.media"],
+html.xs-media [data-testid^="dm-media"],
+html.xs-media [data-testid="dm-conversation-panel"] [data-testid="tweetPhoto"] {
+  filter: blur(22px) saturate(0.6);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+html.xs-media.xs-reveal [data-testid="tweetPhoto"]:hover,
+html.xs-media.xs-reveal [data-testid="videoPlayer"]:hover,
+html.xs-media.xs-reveal [data-testid="videoComponent"]:hover,
+html.xs-media.xs-reveal [data-testid="card.wrapper"]:hover,
+html.xs-media.xs-reveal [data-testid^="dm-media"]:hover {
+  filter: none;
+}
+
+/* Badges / Unread counts */
+html.xs-badges [data-xs-count],
+html.xs-badges [data-testid="pillLabel"],
+html.xs-badges [data-testid*="unread-badge" i],
+html.xs-badges [data-testid*="UnreadBadge" i] {
+  visibility: hidden !important;
+}
+
+/* Direct messages */
+html.xs-dms [data-xs-dm],
+html.xs-dms [data-xs-dmtext],
+html.xs-dms [data-testid="messageEntry"],
+html.xs-dms [class*="text-subtext2"],
+html.xs-dms [data-testid*="reply" i] {
+  filter: blur(5px);
+}
+
+html.xs-dms.xs-reveal [data-xs-dm]:hover,
+html.xs-dms.xs-reveal [data-xs-dmtext]:hover,
+html.xs-dms.xs-reveal [data-testid="messageEntry"]:hover,
+html.xs-dms.xs-reveal [class*="text-subtext2"]:hover,
+html.xs-dms.xs-reveal [data-testid*="reply" i]:hover {
+  filter: none;
+}
+
+/* Exclude DM composer */
+html.xs-dms [data-testid*="composer" i],
+html.xs-dms [data-testid*="Composer" i],
+html.xs-dms [role="textbox"],
+html.xs-dms [contenteditable="true"],
+html.xs-dms textarea,
+html.xs-dms input {
+  filter: none !important;
+}
+
+/* DM inbox list */
+html.xs-dminbox [data-testid^="dm-conversation-item"],
+html.xs-dminbox [data-testid="conversation"] {
+  filter: blur(8px);
+}
+
+html.xs-dminbox.xs-reveal [data-testid^="dm-conversation-item"]:hover,
+html.xs-dminbox.xs-reveal [data-testid="conversation"]:hover {
+  filter: none;
+}
+
+/* Self account */
+html.xs-self [data-xs-self] {
+  filter: blur(6px);
+}
+html.xs-self.xs-reveal [data-xs-self]:hover {
+  filter: none;
+}
+
+/* Panic / idle overlay */
+#xs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 12, 18, 0.42);
+  -webkit-backdrop-filter: blur(28px) saturate(0.4);
+  backdrop-filter: blur(28px) saturate(0.4);
+}
+
+#xs-overlay.xs-visible {
+  display: flex;
+}
+
+#xs-overlay:focus {
+  outline: none;
+}
+
+#xs-overlay .xs-overlay-card {
+  padding: 22px 28px;
+  border-radius: 4px;
+  background: rgba(18, 16, 22, 0.9);
+  box-shadow: 0 0 0 1px rgba(240, 169, 59, 0.5), 0 24px 60px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  font-family: "Bahnschrift", "DIN Alternate", "Arial Narrow", system-ui, sans-serif;
+}
+
+#xs-overlay .xs-overlay-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f0a93b;
+}
+
+#xs-overlay .xs-overlay-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(230, 226, 238, 0.66);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.xs-reveal [data-xs="handle"],
+  html.xs-reveal [data-xs-name],
+  html.xs-reveal [data-xs-convo-name],
+  html.xs-reveal [data-xs-dm],
+  html.xs-reveal [data-xs-dmtext],
+  html.xs-reveal [data-xs-convo],
+  html.xs-reveal [data-testid^="dm-conversation-item"],
+  html.xs-reveal [data-testid="conversation"],
+  html.xs-reveal [data-testid="tweetPhoto"],
+  html.xs-reveal [data-testid^="UserAvatar-Container"],
+  html.xs-reveal [data-testid*="Avatar" i],
+  html.xs-reveal img[src*="profile_images"] {
+    transition: filter 120ms ease, background-color 120ms ease;
+  }
+}

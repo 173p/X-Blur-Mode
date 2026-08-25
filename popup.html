@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+  <title>X Blur Mode</title>
+</head>
+<body>
+  <header class="head">
+    <div class="head-row">
+      <p class="eyebrow">X Blur Mode</p>
+      <label class="master">
+        <input type="checkbox" id="enabled">
+        <span class="master-track"><span class="master-thumb"></span></span>
+        <span class="master-text" id="masterText">On</span>
+      </label>
+    </div>
+
+    <div class="specimen" id="specimen" role="img" aria-label="Preview of a post with your settings applied">
+      <div class="sp-avatar"></div>
+      <div class="sp-body">
+        <div class="sp-line">
+          <span class="sp-name">username</span>
+          <span class="sp-handle">@handle</span>
+        </div>
+        <div class="sp-text">the specimen updates as you flip switches</div>
+        <div class="sp-media"></div>
+      </div>
+      <span class="sp-badge">3</span>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2 class="group">On the page</h2>
+
+      <label class="row">
+        <span class="row-label">Handles<em>@names in posts, replies and profiles</em></span>
+        <input type="checkbox" id="hideHandles"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Display names<em>the human-readable name above each post</em></span>
+        <input type="checkbox" id="hideNames"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Profile pictures<em>avatars everywhere, including yours</em></span>
+        <input type="checkbox" id="hideAvatars"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Photos and video<em>media and link previews inside posts</em></span>
+        <input type="checkbox" id="hideMedia"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Unread counts<em>message and notification numbers</em></span>
+        <input type="checkbox" id="hideBadges"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Direct messages<em>message text, in threads and the inbox</em></span>
+        <input type="checkbox" id="hideDms"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">DM inbox list<em>blur the left chat list in DMs</em></span>
+        <input type="checkbox" id="hideDmInbox"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Your account<em>the name in the sidebar corner</em></span>
+        <input type="checkbox" id="hideSelf"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Tab title<em>replace "@you / X" with just "X"</em></span>
+        <input type="checkbox" id="scrubTitle"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Reveal on hover<em>point at anything hidden to read it</em></span>
+        <input type="checkbox" id="revealOnHover"><span class="sw"></span>
+      </label>
+    </section>
+
+    <section>
+      <h2 class="group">When you step away</h2>
+
+      <label class="row">
+        <span class="row-label">Blur when unfocused<em>you switch tabs, apps or screens</em></span>
+        <input type="checkbox" id="blurOnUnfocus"><span class="sw"></span>
+      </label>
+
+      <label class="row">
+        <span class="row-label">Blur when idle<em>no mouse or keyboard for a while</em></span>
+        <input type="checkbox" id="idleBlur"><span class="sw"></span>
+      </label>
+
+      <div class="row row-sub" id="idleRow">
+        <span class="row-label">Wait</span>
+        <select id="idleSeconds" class="select">
+          <option value="20">20 seconds</option>
+          <option value="45">45 seconds</option>
+          <option value="90">90 seconds</option>
+          <option value="300">5 minutes</option>
+        </select>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <button id="panic" class="panic" type="button">
+      <span id="panicText">Hide the screen now</span>
+      <kbd id="panicHint"></kbd>
+    </button>
+    <p class="foot-note">Nothing is sent anywhere. Everything happens in this browser.</p>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
