@@ -1,9 +1,18 @@
-# X Blur Mode
+<div align="center">
+  <img width="120" height="120" alt="X Blur Mode logo" src="https://github.com/user-attachments/assets/9c37ca3f-35a2-4cfb-b6c4-e794a75ce6f1" />
 
-Keeps the person next to you irl from snooping your timeline. Redacts @handles, display names,
-avatars, media, DMs and unread counts on twitter, and blurs the whole page when
-you step away or hit the 'Hide the screen now' button in the toolbar.
+  <h1>X Blur Mode</h1>
+  <p><strong>Screen Privacy & Timeline Redaction Extension</strong></p>
 
+  <p>
+    <a href="https://chromewebstore.google.com/detail/x-blur-mode/apighlblblcplbamiiabbmkocbekljck"><img alt="Chrome Web Store" src="https://img.shields.io/badge/Chrome-Available-4285F4?logo=googlechrome&logoColor=white" /></a>
+    <img alt="Firefox Add-ons" src="https://img.shields.io/badge/Firefox-TBA_(Under_Review)-FF7139?logo=firefox&logoColor=white" />
+  </p>
+</div>
+
+---
+
+Keeps the person next to you or whoever you're sharing your screen with from snooping your timeline. Redacts @handles, display names, avatars, media, DMs, and unread counts on Twitter/X, and blurs the whole page when you step away or hit the 'Hide the screen now' button in the toolbar.
 
 ## What each switch does
 
