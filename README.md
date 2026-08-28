@@ -6,7 +6,7 @@
 
   <p>
     <a href="https://chromewebstore.google.com/detail/x-blur-mode/apighlblblcplbamiiabbmkocbekljck"><img alt="Chrome Web Store" src="https://img.shields.io/badge/Chrome-Available-4285F4?logo=googlechrome&logoColor=white" /></a>
-    <img alt="Firefox Add-ons" src="https://img.shields.io/badge/Firefox-TBA_(Under_Review)-FF7139?logo=firefox&logoColor=white" />
+    <a href="https://addons.mozilla.org/en-US/firefox/addon/x-blur-mode/"><img alt="Firefox Add-ons" src="https://img.shields.io/badge/Firefox-Available-FF7139?logo=firefox&logoColor=white" /></a>
   </p>
 </div>
 
