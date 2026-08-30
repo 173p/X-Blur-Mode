@@ -7,7 +7,6 @@ html.xs-boot [data-testid="dm-conversation-panel"] {
   filter: blur(16px) saturate(0.6);
 }
 
-/* Handles */
 html.xs-handles [data-xs="handle"] {
   color: transparent !important;
   text-shadow: none !important;
@@ -26,49 +25,41 @@ html.xs-handles.xs-reveal [data-xs="handle"]:focus-visible {
   filter: none;
 }
 
-/* Display names */
+html.xs-handles [data-xs="softhandle"],
+html.xs-handles [data-xs="dmhandle"],
+html.xs-handles [data-xs="social"] {
+  filter: blur(5px);
+  cursor: default;
+}
+
+html.xs-handles.xs-reveal [data-xs="softhandle"]:hover,
+html.xs-handles.xs-reveal [data-xs="softhandle"]:focus-visible,
+html.xs-handles.xs-reveal [data-xs="dmhandle"]:hover,
+html.xs-handles.xs-reveal [data-xs="dmhandle"]:focus-visible,
+html.xs-handles.xs-reveal [data-xs="social"]:hover,
+html.xs-handles.xs-reveal [data-xs="social"]:focus-visible {
+  filter: none;
+}
+
 html.xs-names [data-xs-name],
 html.xs-names [data-xs-convo-name],
-html.xs-names [data-xs-cell] > div > div:first-child,
-html.xs-names [data-xs-convo] [data-testid="User-Name"],
-html.xs-names [data-testid^="dm-conversation-item"] [data-xs-convo-name],
-html.xs-names [class*="text-headline2"],
-html.xs-names [class*="text-subtext2"],
-html.xs-names [data-testid*="reply" i] span,
-html.xs-names [data-testid*="reply" i] div,
-html.xs-names [data-testid="dm-conversation-panel"] [class*="text-headline2"],
-html.xs-names [data-testid="dm-conversation-panel"] [class*="text-subtext2"],
-html.xs-names [data-testid="dm-container"] [class*="text-headline2"],
-html.xs-names [data-testid="dm-container"] [class*="text-subtext2"],
-html.xs-names [data-testid="dm-conversation-panel"] header [dir="ltr"],
-html.xs-names [data-testid="dm-conversation-panel"] header [dir="auto"],
-html.xs-names [data-testid="dm-conversation-panel"] header h2,
-html.xs-names [data-testid="dm-conversation-panel"] [data-testid*="header" i] h2,
-html.xs-names [data-testid="dm-conversation-panel"] [data-testid*="header" i] a span,
-html.xs-names [data-testid="dm-conversation-panel"] > div:first-child a[role="link"],
-html.xs-names [data-testid="dm-conversation-panel"] > div:first-child h2 {
+html.xs-names [data-xs-convo] [data-testid="User-Name"] {
   filter: blur(5px);
+}
+
+/* Never blur real post or message content as a "name". */
+html.xs-names [data-testid="tweetText"],
+html.xs-names [data-testid="tweetText"] *,
+html.xs-names [data-testid="dm-message-text"],
+html.xs-names [data-testid="dm-message-text"] * {
+  filter: none !important;
 }
 
 html.xs-names.xs-reveal [data-xs-name]:hover,
 html.xs-names.xs-reveal [data-xs-convo-name]:hover,
+html.xs-names.xs-reveal [data-xs-cell]:hover [data-xs-name],
 html.xs-names.xs-reveal [data-xs-convo]:hover [data-testid="User-Name"],
-html.xs-names.xs-reveal [data-xs-convo]:hover [data-xs-convo-name],
-html.xs-names.xs-reveal [class*="text-headline2"]:hover,
-html.xs-names.xs-reveal [class*="text-subtext2"]:hover,
-html.xs-names.xs-reveal [data-testid*="reply" i] span:hover,
-html.xs-names.xs-reveal [data-testid*="reply" i] div:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [class*="text-headline2"]:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [class*="text-subtext2"]:hover,
-html.xs-names.xs-reveal [data-testid="dm-container"] [class*="text-headline2"]:hover,
-html.xs-names.xs-reveal [data-testid="dm-container"] [class*="text-subtext2"]:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] header [dir="ltr"]:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] header [dir="auto"]:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] header h2:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [data-testid*="header" i] h2:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] [data-testid*="header" i] a span:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] > div:first-child a[role="link"]:hover,
-html.xs-names.xs-reveal [data-testid="dm-conversation-panel"] > div:first-child h2:hover {
+html.xs-names.xs-reveal [data-xs-convo]:hover [data-xs-convo-name] {
   filter: none;
 }
 
@@ -129,20 +120,32 @@ html.xs-badges [data-testid*="UnreadBadge" i] {
   visibility: hidden !important;
 }
 
-/* Direct messages */
+
 html.xs-dms [data-xs-dm],
 html.xs-dms [data-xs-dmtext],
-html.xs-dms [data-testid="messageEntry"],
-html.xs-dms [class*="text-subtext2"],
-html.xs-dms [data-testid*="reply" i] {
+html.xs-dms [data-testid="messageEntry"] {
   filter: blur(5px);
+}
+
+/* DM media, including Firefox's bare <video> wrappers in a thread. */
+html.xs-dms [data-xs-dmmedia],
+html.xs-dms [data-testid="dm-conversation-panel"] video,
+html.xs-dms [data-testid="dm-conversation-panel"] [data-testid^="dm-media"],
+html.xs-dms [data-testid="dm-conversation-panel"] [data-testid="videoPlayer"],
+html.xs-dms [data-testid="dm-conversation-panel"] [data-testid="videoComponent"] {
+  filter: blur(22px) saturate(0.6);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 html.xs-dms.xs-reveal [data-xs-dm]:hover,
 html.xs-dms.xs-reveal [data-xs-dmtext]:hover,
 html.xs-dms.xs-reveal [data-testid="messageEntry"]:hover,
-html.xs-dms.xs-reveal [class*="text-subtext2"]:hover,
-html.xs-dms.xs-reveal [data-testid*="reply" i]:hover {
+html.xs-dms.xs-reveal [data-xs-dmmedia]:hover,
+html.xs-dms.xs-reveal [data-testid="dm-conversation-panel"] video:hover,
+html.xs-dms.xs-reveal [data-testid="dm-conversation-panel"] [data-testid^="dm-media"]:hover,
+html.xs-dms.xs-reveal [data-testid="dm-conversation-panel"] [data-testid="videoPlayer"]:hover,
+html.xs-dms.xs-reveal [data-testid="dm-conversation-panel"] [data-testid="videoComponent"]:hover {
   filter: none;
 }
 
@@ -172,6 +175,24 @@ html.xs-self [data-xs-self] {
   filter: blur(6px);
 }
 html.xs-self.xs-reveal [data-xs-self]:hover {
+  filter: none;
+}
+
+/* Profile bio
+   Independent of display names: turning names on no longer blurs the bio. */
+html.xs-bio [data-xs-bio] {
+  filter: blur(5px);
+}
+
+html.xs-bio.xs-reveal [data-xs-bio]:hover {
+  filter: none;
+}
+
+html.xs-discover [data-xs-discover-item] {
+  filter: blur(7px) saturate(0.7);
+}
+
+html.xs-discover.xs-reveal [data-xs-discover-item]:hover {
   filter: none;
 }
 
@@ -223,11 +244,18 @@ html.xs-self.xs-reveal [data-xs-self]:hover {
 
 @media (prefers-reduced-motion: no-preference) {
   html.xs-reveal [data-xs="handle"],
+  html.xs-reveal [data-xs="softhandle"],
+  html.xs-reveal [data-xs="dmhandle"],
+  html.xs-reveal [data-xs="social"],
   html.xs-reveal [data-xs-name],
   html.xs-reveal [data-xs-convo-name],
+  html.xs-reveal [data-xs-bio],
   html.xs-reveal [data-xs-dm],
   html.xs-reveal [data-xs-dmtext],
+  html.xs-reveal [data-xs-dmmedia],
   html.xs-reveal [data-xs-convo],
+  html.xs-reveal [data-xs-discover],
+  html.xs-reveal [data-xs-discover-item],
   html.xs-reveal [data-testid^="dm-conversation-item"],
   html.xs-reveal [data-testid="conversation"],
   html.xs-reveal [data-testid="tweetPhoto"],

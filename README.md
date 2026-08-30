@@ -12,20 +12,23 @@
 
 ---
 
-Keeps the person next to you or whoever you're sharing your screen with from snooping your timeline. Redacts @handles, display names, avatars, media, DMs, and unread counts on Twitter/X, and blurs the whole page when you step away or hit the 'Hide the screen now' button in the toolbar.
+Keeps the person next to you or whoever you're sharing your screen with from snooping your timeline. Redacts @handles, display names, bios, avatars, media, DMs, trends and unread counts on Twitter/X, can mask the address bar down to `x.com`, and blurs the whole page when you step away or hit the 'Hide the screen now' button in the toolbar.
 
 ## What each switch does
 
 | Switch | Effect |
 | --- | --- |
-| Handles | Draws a redaction bar over every `@name` (posts, replies, profiles, mentions) |
+| Handles | Blurs `@handles` and the other places a name identifies someone — see [What "Handles" covers](#what-handles-covers) |
 | Display names | Blurs the human-readable name above each post, in user lists and DM rows |
+| Profile bio | Blurs the description under a name, on profiles and in hover preview cards |
 | Profile pictures | Blurs every avatar |
 | Photos and video | Blurs post media and link-preview cards |
 | Unread counts | Hides the number badges on Messages and Notifications |
 | Direct messages | Blurs message text, both in an open thread and in the inbox previews |
 | DM inbox list | Blurs the entire conversation list on the left in DMs without affecting other pages |
 | Your account | Blurs your own name in the sidebar account button |
+| Trends & suggestions | Blurs the discovery modules — trending / what's happening, today's news, live on X, and who to follow / you might like — in the sidebar, on profiles and inline in the timeline. Each module's heading stays readable so you can still tell the sections apart. |
+| Mask the address bar | Rewrites the URL to `x.com`, so profile and post paths never show in the address bar, screen shares or screenshots. Display only — the real path is restored before any navigation, so typing a URL or clicking a link still works normally |
 | Tab title | Forces the tab title to `X`, so the tab strip stops leaking your handle |
 | Reveal on hover | Point at anything hidden to read it; move away and it re-hides |
 | Blur when unfocused | Full-page blur the moment the window loses focus (screen shares, alt-tab) |
