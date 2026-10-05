@@ -57,7 +57,18 @@
   function clearBoot() {
     clearTimeout(bootTimer);
     ROOT.classList.remove("xs-boot");
+    syncShadowFlags();
   }
+
+  // X renders chat inside open shadow roots, which neither the manifest
+  // stylesheet nor a document-level query reaches. Each root gets its own
+  // copy of the sheet and is scanned as a scope of its own.
+  const FLAG_ATTR = "data-xs-flags";
+  let shadowRoots = [];
+  let shadowCss = null;
+  let shadowCssRequested = false;
+  const shadowStyles = new WeakMap();
+  const shadowObserved = new WeakSet();
 
   const SEL = {
     userNameBlock: '[data-testid="User-Name"], [data-testid="UserName"]',
@@ -67,7 +78,8 @@
     unreadLink: 'a[aria-label*="unread" i], a[aria-label*="notification" i], [data-testid^="AppTabBar"] a, [data-testid="dm-inbox-header"], [data-testid*="badge" i], [data-testid*="unread" i]',
     appRendered: '[data-testid="primaryColumn"], [data-testid="dm-container"], [data-testid="dm-inbox-panel"]',
     // Post / message body text. Never treated as a display name.
-    bodyText: '[data-testid="tweetText"], [data-testid="dm-message-text"]',
+    bodyText: '[data-testid="tweetText"], [data-testid="dm-message-text"], [data-testid^="message-text"]',
+    dmComposer: '[data-testid="dm-composer-container"]',
     socialContext: '[data-testid="socialContext"]',
     dmTyping: '[data-testid*="typing" i], [aria-label*="typing" i]',
     dmReply: '[data-testid*="reply" i], [data-testid*="quoted" i]',
@@ -80,6 +92,7 @@
   const BARE_LABEL_MAX = 50;
   const BARE_HANDLE_RE = /^[^\n\r]{1,50}$/u;
   const COUNT_RE = /^\d{1,4}\+?$/;
+  const ROW_TIME_RE = /^[·•\d\s]+[smhdwy]?$/i;
   const ZW_RE = /[\u200B-\u200D\uFEFF\u200E\u200F\u202A-\u202E]/g;
 
   const clean = (s) => (s || "").replace(ZW_RE, "").trim();
@@ -110,6 +123,67 @@
     ROOT.classList.toggle("xs-discover", on && S.hideDiscover);
     ROOT.classList.toggle("xs-reveal", on && S.revealOnHover);
     if (!on) clearBoot();
+    syncShadowFlags();
+  }
+
+  /* ------------------------------------------------------------ shadow DOM */
+
+  // The html.xs-* flag classes are out of reach of a shadow sheet, so they
+  // are mirrored onto each host and matched with :host().
+  function syncShadowFlags() {
+    const flags = Array.from(ROOT.classList).filter((c) => c.startsWith("xs-")).join(" ");
+    for (const root of shadowRoots) {
+      const host = root.host;
+      if (host && host.getAttribute(FLAG_ATTR) !== flags) host.setAttribute(FLAG_ATTR, flags);
+    }
+  }
+
+  function loadShadowCss() {
+    if (shadowCssRequested) return;
+    shadowCssRequested = true;
+    fetch(api.runtime.getURL("content.css"))
+      .then((r) => r.text())
+      .then((css) => {
+        shadowCss = css.replace(/html((?:\.xs-[\w-]+)+)\s+/g, (_, classes) =>
+          ":host(" +
+          classes.slice(1).split(".").map((c) => `[${FLAG_ATTR}~="${c}"]`).join("") +
+          ") "
+        );
+        queueScan();
+      })
+      .catch(() => {});
+  }
+
+  function findShadowRoots(root, out) {
+    for (const el of root.querySelectorAll("*")) {
+      const sr = el.shadowRoot;
+      if (!sr) continue;
+      out.push(sr);
+      findShadowRoots(sr, out);
+    }
+    return out;
+  }
+
+  function syncShadowRoots() {
+    shadowRoots = findShadowRoots(document.body, []);
+    if (shadowRoots.length) loadShadowCss();
+    for (const root of shadowRoots) {
+      if (!shadowObserved.has(root)) {
+        shadowObserved.add(root);
+        observeTree(root);
+      }
+      if (!shadowCss) continue;
+      // Re-attached if the app re-renders the root and drops it.
+      let style = shadowStyles.get(root);
+      if (!style) {
+        style = document.createElement("style");
+        style.textContent = shadowCss;
+        shadowStyles.set(root, style);
+      }
+      if (style.parentNode !== root) root.appendChild(style);
+    }
+    syncShadowFlags();
+    return shadowRoots;
   }
 
   /* --------------------------------------------------------------- handles */
@@ -170,6 +244,44 @@
         el.setAttribute("data-xs", bare ? "dmhandle" : "softhandle");
       }
     }
+
+    // The composer is skipped above, so its reply banner is tagged here.
+    const name = replyBannerParts(scope).name;
+    if (name && !name.hasAttribute("data-xs")) name.setAttribute("data-xs", "dmhandle");
+  }
+
+  const hasOwnText = (el) =>
+    Array.from(el.childNodes).some((n) => n.nodeType === 3 && clean(n.textContent));
+
+  // "Replying to" banner above the composer: the name, then the quoted text.
+  // Everything else in the composer is a control.
+  function replyBannerParts(scope) {
+    const box = scope.querySelector ? scope.querySelector(SEL.dmComposer) : null;
+    const blocks = [];
+    if (box) {
+      for (const el of box.querySelectorAll("div, span")) {
+        if (!hasOwnText(el)) continue;
+        if (el.closest('form, button, [role="button"], [role="textbox"], [contenteditable], textarea, input')) continue;
+        if (blocks.some((b) => b.contains(el))) continue;
+        // A voice note's running timer.
+        if (/^\d{1,2}:\d{2}/.test(clean(el.textContent))) continue;
+        blocks.push(el);
+      }
+    }
+    return { name: blocks[0] || null, quote: blocks.slice(1) };
+  }
+
+  // Text quoted above a reply bubble. It sits before the bubble and outside
+  // the "↩ name" attribution, the row holding the icon.
+  function isReplyQuote(el) {
+    const item = el.closest('[data-testid^="message-"]');
+    const bubble = item ? item.querySelector('[role="article"]') : null;
+    if (!bubble || el.parentElement === item) return false;
+    if (!(el.compareDocumentPosition(bubble) & Node.DOCUMENT_POSITION_FOLLOWING)) return false;
+    for (let n = el; n && !n.contains(bubble); n = n.parentElement) {
+      if (n.querySelector(":scope > svg")) return false;
+    }
+    return true;
   }
 
   // Filters on position, not characters: a standalone leaf outside any
@@ -186,6 +298,8 @@
     // Message text and quoted posts belong to the DM / name options.
     if (isBodyText(el)) return false;
     if (el.closest('[data-testid="messageEntry"]')) return false;
+    if (isReplyQuote(el)) return false;
+    if (el.closest('[data-testid^="dm-empty"]')) return false;
     if (el.closest(SEL.userNameBlock)) return false;
     if (el.closest('time, button, [role="button"], [data-testid*="composer" i]')) return false;
     return el.childElementCount === 0;
@@ -408,16 +522,9 @@
     for (const row of scope.querySelectorAll(SEL.conversation)) {
       if (!row.hasAttribute("data-xs-convo")) row.setAttribute("data-xs-convo", "");
       if (!row.querySelector(SEL.userNameBlock)) {
-        const spans = Array.from(row.querySelectorAll("span")).filter(
-          (s) => s.childElementCount === 0 && clean(s.textContent).length > 0
-        );
-        for (const s of spans) {
-          const t = clean(s.textContent);
-          if (t.startsWith("@") || /^[·•\d\s]+[smhdwy]?$/i.test(t)) continue;
-          if (!s.hasAttribute("data-xs-name") && !s.hasAttribute("data-xs-convo-name")) {
-            s.setAttribute("data-xs-convo-name", "");
-          }
-          break;
+        const name = rowParts(row).name;
+        if (name && !name.hasAttribute("data-xs-name") && !name.hasAttribute("data-xs-convo-name")) {
+          name.setAttribute("data-xs-convo-name", "");
         }
       }
     }
@@ -515,6 +622,16 @@
         if (!el.hasAttribute("data-xs-dm")) el.setAttribute("data-xs-dm", "");
       }
 
+      // Quoted text above a reply bubble carries no dir attribute.
+      for (const bubble of chatPanel.querySelectorAll('[data-testid^="message-"] [role="article"]')) {
+        const item = bubble.closest('[data-testid^="message-"]');
+        for (const el of item.querySelectorAll("span, div")) {
+          if (!hasOwnText(el) || !isReplyQuote(el)) continue;
+          if (el.closest("[data-xs-dm]")) continue;
+          el.setAttribute("data-xs-dm", "");
+        }
+      }
+
       // Firefox renders DM video into bare <video> wrappers with none of the
       // tweet media testids, so the CSS-only rules miss them.
       for (const media of chatPanel.querySelectorAll(
@@ -533,6 +650,10 @@
       }
     }
 
+    for (const el of replyBannerParts(scope).quote) {
+      if (!el.hasAttribute("data-xs-dm")) el.setAttribute("data-xs-dm", "");
+    }
+
     // Blur the preview; the row name belongs to the display-name option.
     for (const row of scope.querySelectorAll(SEL.conversation)) {
       const nameBlock = row.querySelector(SEL.userNameBlock);
@@ -544,26 +665,32 @@
           if (!el.hasAttribute("data-xs-dmtext")) el.setAttribute("data-xs-dmtext", "");
         }
       } else {
-        const spans = Array.from(row.querySelectorAll("span")).filter(
-          (s) => s.childElementCount === 0 && clean(s.textContent).length > 0
-        );
-        let passedName = false;
-        for (const s of spans) {
-          if (s.hasAttribute("data-xs-convo-name") || s.hasAttribute("data-xs-name")) {
-            passedName = true;
-            continue;
-          }
-          const t = clean(s.textContent);
-          if (t.startsWith("@")) continue;
-          if (/^[·•\d\s]+[smhdwy]?$/i.test(t)) continue;
-          if (passedName) {
-            if (!s.hasAttribute("data-xs-dmtext")) s.setAttribute("data-xs-dmtext", "");
-          } else {
-            passedName = true;
-          }
+        for (const s of rowParts(row).preview) {
+          if (!s.hasAttribute("data-xs-dmtext")) s.setAttribute("data-xs-dmtext", "");
         }
       }
     }
+  }
+
+  // An inbox row with no User-Name block: the name is the first text leaf
+  // (a div or a span), the preview every outermost span after it. The
+  // preview's "You: " prefix is the outer span's own text, so a leaf-only
+  // walk would leave it readable.
+  function rowParts(row) {
+    let name = null;
+    const preview = [];
+    for (const el of row.querySelectorAll("span, div")) {
+      const t = clean(el.textContent);
+      if (!t || t.startsWith("@") || ROW_TIME_RE.test(t)) continue;
+      if (!name) {
+        if (el.childElementCount === 0) name = el;
+        continue;
+      }
+      if (el.tagName !== "SPAN") continue;
+      if (preview.some((p) => p.contains(el))) continue;
+      preview.push(el);
+    }
+    return { name, preview };
   }
 
   /* ------------------------------------------------------------------ self */
@@ -830,7 +957,12 @@
   function scan() {
     scanQueued = false;
     if (!S.enabled || !document.body) return;
-    const scope = document.body;
+    let roots = [];
+    try { roots = syncShadowRoots(); } catch (_) {}
+    for (const scope of [document.body, ...roots]) scanScope(scope);
+  }
+
+  function scanScope(scope) {
     try {
       if (S.hideHandles) markHandles(scope);
       if (S.hideNames) markNames(scope);
@@ -949,13 +1081,17 @@
     window.addEventListener(ev, resetIdle, { passive: true })
   );
 
-  function startObserving() {
-    if (!document.body) return;
-    new MutationObserver(() => { queueScan(); scrubTitle(); }).observe(document.body, {
+  function observeTree(root) {
+    new MutationObserver(() => { queueScan(); scrubTitle(); }).observe(root, {
       childList: true,
       subtree: true,
       characterData: true
     });
+  }
+
+  function startObserving() {
+    if (!document.body) return;
+    observeTree(document.body);
     const head = document.head;
     if (head) {
       new MutationObserver(scrubTitle).observe(head, {
