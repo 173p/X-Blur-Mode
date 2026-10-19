@@ -18,7 +18,7 @@ Keeps the person next to you or whoever you're sharing your screen with from sno
 
 | Switch | Effect |
 | --- | --- |
-| Handles | Blurs `@handles` and the other places a name identifies someone — see [What "Handles" covers](#what-handles-covers) |
+| Handles | Blurs `@handles` and the other places a name identifies someone |
 | Display names | Blurs the human-readable name above each post, in user lists and DM rows |
 | Profile bio | Blurs the description under a name, on profiles and in hover preview cards |
 | Profile pictures | Blurs every avatar |
